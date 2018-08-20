@@ -1,3 +1,5 @@
+package com.lu;
+
 public class Leet152 {
     public int maxProduct(int[] nums) {
         if (nums.length == 0)
