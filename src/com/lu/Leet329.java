@@ -1,35 +1,40 @@
 package com.lu;
 
 public class Leet329 {
+    private int search(int[][] matrix, int[][] memory, int x, int y) {
+        if(memory[x][y] > 0)
+            return memory[x][y];
+        int result = 1;
+        // head left
+        if (y - 1 >= 0 && matrix[x][y] > matrix[x][y - 1]) {
+            result = Math.max(result, 1 + search(matrix, memory, x, y - 1));
+        }
+        // head right
+        if (y + 1 < matrix[0].length && matrix[x][y] > matrix[x][y + 1]) {
+            result = Math.max(result, 1 + search(matrix, memory, x, y + 1));
+        }
+        // head up
+        if (x - 1 >= 0 && matrix[x][y] > matrix[x - 1][y]) {
+            result = Math.max(result, 1 + search(matrix, memory,x - 1, y));
+        }
+        // head down
+        if (x + 1 < matrix.length && matrix[x][y] > matrix[x + 1][y]) {
+            result = Math.max(result, 1 + search(matrix, memory,x + 1, y));
+        }
+
+        memory[x][y] = result;
+        return result;
+    }
+
     public int longestIncreasingPath(int[][] matrix) {
-        if(matrix.length == 0)
+        if (matrix.length == 0)
             return 0;
-        int[][] dp1 = new int[matrix.length][matrix[0].length];
-        int[][] dp2 = new int[matrix.length][matrix[0].length];
         int result = 0;
+        int[][] memory = new int[matrix.length][matrix[0].length];
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
-                dp1[i][j] = 1;
-                dp2[i][j] = 1;
-                if(i != 0 || j != 0){
-                    int cur = matrix[i][j];
-                    if(i != 0){
-                        int up = matrix[i-1][j];
-                        if(cur > up)
-                            dp1[i][j] = Math.max(dp1[i][j], dp1[i-1][j]+1);
-                        if(cur < up)
-                            dp2[i][j] = Math.max(dp2[i][j], dp2[i-1][j]+1);
-                    }
-                    if(j != 0){
-                        int left = matrix[i][j-1];
-                        if(cur > left)
-                            dp1[i][j] = Math.max(dp1[i][j], dp1[i][j-1]+1);
-                        if(cur < left)
-                            dp2[i][j] = Math.max(dp2[i][j], dp2[i][j-1]+1);
-                    }
-                }
-                result = Math.max(result, Math.max(dp1[i][j], dp2[i][j]));
+                result = Math.max(result, search(matrix, memory, i, j));
             }
         }
 

@@ -1,3 +1,5 @@
+package com.lu;
+
 public class Leet213 {
     public int rob(int[] nums) {
         if (nums.length == 0)
